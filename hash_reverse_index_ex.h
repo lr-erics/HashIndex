@@ -1,14 +1,14 @@
-#ifndef  HASH_RESERVE_INDEX_EX_H_
-#define  HASH_RESERVE_INDEX_EX_H_
+#ifndef HASH_RESERVE_INDEX_EX_H
+#define HASH_RESERVE_INDEX_EX_H
 
 #include <stdint.h>
 #include <functional>
 #include <vector>
 #include <iostream>
-#include "string.h"
 
 #include <google/sparse_hash_map>
 #include <unordered_map>
+
 #include "recycled_memory_pool.h"
 
 namespace hash_index {
@@ -78,7 +78,6 @@ public:
             // alloc head node of new index
             node_type* new_node = new_index(index, key, value);
             if (new_node == NULL) {
-                //std::cout << "yyyy" << std::endl;
                 return NULL;
             }
             node_map_[key] = new_node;
@@ -104,7 +103,6 @@ public:
     {
         node_type* node = exist(key);
         if (node == NULL) {
-            //std::cout << "zzzz" << std::endl;
             return insert(index, key, value);
         }
 
@@ -113,8 +111,6 @@ public:
             node->value = value;
             return node;
         }
-
-        //std::cout << "xxxx:" << node->key << " " << key <<std::endl;
 
         return NULL;
     }
@@ -238,5 +234,5 @@ private:
 
 } // namespace hash_index 
 
-#endif  //HASH_RESERVE_INDEX_EX_H_
+#endif // HASH_RESERVE_INDEX_EX_H
 

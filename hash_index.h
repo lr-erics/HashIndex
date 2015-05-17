@@ -1,5 +1,5 @@
-#ifndef  HASH_INDEX_H_
-#define  HASH_INDEX_H_
+#ifndef HASH_INDEX_H_
+#define HASH_INDEX_H_
 
 #include <stdint.h>
 #include <string.h>

@@ -1,5 +1,5 @@
-#ifndef  COMMON_MEMORYPOOL_H
-#define  COMMON_MEMORYPOOL_H
+#ifndef COMMON_MEMORYPOOL_H
+#define COMMON_MEMORYPOOL_H
 
 #include <vector>
 

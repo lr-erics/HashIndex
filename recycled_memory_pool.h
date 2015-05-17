@@ -1,5 +1,5 @@
-#ifndef  RECYCLED_MEMORYPOOL_H
-#define  RECYCLED_MEMORYPOOL_H
+#ifndef RECYCLED_MEMORYPOOL_H
+#define RECYCLED_MEMORYPOOL_H
 
 #include <vector>
 
