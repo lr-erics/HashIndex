@@ -3,7 +3,7 @@
 #include <stdio.h>
 
 #include "hash_index.h"
-#include "memory_pool.h"
+#include "recycled_memory_pool.h"
 
 class RecycledMemoryPoolTest : public ::testing::Test {
 public:

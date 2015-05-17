@@ -8,7 +8,7 @@
 #include "string.h"
 
 #include <google/sparse_hash_map>
-#include "memory_pool.h"
+#include "recycled_memory_pool.h"
 
 namespace hash_index {
 

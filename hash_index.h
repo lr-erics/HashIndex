@@ -5,7 +5,7 @@
 #include <string.h>
 #include <vector>
 
-#include "memory_pool.h"
+#include "recycled_memory_pool.h"
 
 namespace hash_index {
 
