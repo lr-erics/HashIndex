@@ -1,7 +1,7 @@
 #ifndef COMMON_MEMORYPOOL_H
 #define COMMON_MEMORYPOOL_H
 
-#include <vector>
+#include <deque>
 
 namespace hash_index {
 
@@ -106,11 +106,11 @@ private:
     size_t free_;
 
     uint32_t idx_;
-    std::vector< void* > mem_blocks_;
+    std::deque< void* > mem_blocks_;
 
 }; // CommonMemoryPool
 
-} // namespace hash_index 
+} // namespace hash_index
 
 #endif  // COMMON_MEMORYPOOL_H
 

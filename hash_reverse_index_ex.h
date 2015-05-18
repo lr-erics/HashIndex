@@ -2,7 +2,7 @@
 #define HASH_RESERVE_INDEX_EX_H
 
 #include <stdint.h>
-#include <functional>
+#include <deque>
 #include <vector>
 #include <iostream>
 
@@ -41,10 +41,17 @@ public:
     }
 
     int create(uint32_t index_num) {
-        index_buckets_.reserve(index_num);
-        recycled_.reserve(100 * 1024 * 1024);
+        try {
+            index_buckets_.resize(index_num);
+            index_buckets_.clear();
+            recycled_.reserve(100 * 1024 * 1024);
 
-        if(mempool_.create() != 0) {
+            if(mempool_.create() != 0) {
+                return -1;
+            }
+        } catch(std::bad_alloc& e) {
+            return -1;
+        } catch(...) {
             return -1;
         }
         return 0;
@@ -69,8 +76,7 @@ public:
         return cur_node;
     }
 
-    node_type* insert(const Key& index, const NKT& key, const NVT& value, bool replace_existed)
-    {
+    node_type* insert(const Key& index, const NKT& key, const NVT& value, bool replace_existed) {
         node_type* node = exist(key);
         if (node == NULL) {
             return insert(index, key, value);
@@ -223,7 +229,7 @@ private:
         return new_node;
     }
 
-    std::vector<uint64_t> index_buckets_;
+    std::deque<uint64_t> index_buckets_;
     size_t current_index_num_;
 
     std::unordered_map<NKT, node_type*> node_map_;
@@ -232,7 +238,7 @@ private:
     RecycledMemoryPool<node_type> mempool_;
 };
 
-} // namespace hash_index 
+} // namespace hash_index
 
 #endif // HASH_RESERVE_INDEX_EX_H
 

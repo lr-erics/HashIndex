@@ -1,7 +1,7 @@
 #ifndef RECYCLED_MEMORYPOOL_H
 #define RECYCLED_MEMORYPOOL_H
 
-#include <vector>
+#include <deque>
 
 namespace hash_index {
 
@@ -120,12 +120,12 @@ private:
     size_t free_;
 
     uint32_t idx_;
-    std::vector< void* > mem_blocks_;
+    std::deque< void* > mem_blocks_;
 
-    std::vector< T* > recycled_;
+    std::deque< T* > recycled_;
 }; // RecycledMemoryPool
 
-} // namespace hash_index 
+} // namespace hash_index
 
 #endif  // RECYCLED_MEMORYPOOL_H
 

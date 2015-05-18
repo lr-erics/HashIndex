@@ -4,6 +4,7 @@
 #include <stdint.h>
 #include <functional>
 #include <vector>
+#include <deque>
 #include <iostream>
 #include "string.h"
 
@@ -51,10 +52,17 @@ public:
     }
 
     int create(uint32_t index_num) {
-        index_buckets_.reserve(index_num);
-        recycled_.reserve(100 * 1024 * 1024);
+        try {
+            index_buckets_.resize(index_num);
+            index_buckets_.clear();
+            recycled_.reserve(100 * 1024 * 1024);
 
-        if(mempool_.create() != 0) {
+            if(mempool_.create() != 0) {
+                return -1;
+            }
+        } catch(std::bad_alloc& e) {
+            return -1;
+        } catch(...) {
             return -1;
         }
         return 0;
@@ -208,7 +216,7 @@ private:
         return mempool_.malloc();
     }
 
-    std::vector<uint64_t> index_buckets_;
+    std::deque<uint64_t> index_buckets_;
     size_t current_index_num_;
 
     EqualFunc equal_;
@@ -217,7 +225,7 @@ private:
     RecycledMemoryPool<value_type> mempool_;
 };
 
-} // namespace hash_index 
+} // namespace hash_index
 
 #endif  //HASH_RESERVE_INDEX_H_
 
