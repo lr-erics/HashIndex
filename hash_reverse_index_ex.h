@@ -69,36 +69,6 @@ public:
         return cur_node;
     }
 
-    node_type* insert(const Key& index, const NKT& key, const NVT& value)
-    {
-        size_t index_id = 0;
-        node_type* index_head = get_index(index, index_id);
-        node_type* cur_node = index_head;
-        if (cur_node == NULL) {
-            // alloc head node of new index
-            node_type* new_node = new_index(index, key, value);
-            if (new_node == NULL) {
-                return NULL;
-            }
-            node_map_[key] = new_node;
-            return new_node;
-        }
-
-        // allocate new node
-        node_type* new_node = alloc_node();
-        if (new_node == NULL) {
-            return NULL;
-        }
-        new_node->key = key;
-        new_node->value = value;
-        index_head->pre = new_node;
-        new_node->next = index_head;
-        new_node->pre = NULL;
-        index_buckets_[index_id] = reinterpret_cast<uint64_t>(new_node);
-        node_map_[key] = new_node;
-        return new_node;
-    }
-
     node_type* insert(const Key& index, const NKT& key, const NVT& value, bool replace_existed)
     {
         node_type* node = exist(key);
@@ -221,6 +191,36 @@ private:
 
     node_type* alloc_node() {
         return mempool_.malloc();
+    }
+
+    node_type* insert(const Key& index, const NKT& key, const NVT& value)
+    {
+        size_t index_id = 0;
+        node_type* index_head = get_index(index, index_id);
+        node_type* cur_node = index_head;
+        if (cur_node == NULL) {
+            // alloc head node of new index
+            node_type* new_node = new_index(index, key, value);
+            if (new_node == NULL) {
+                return NULL;
+            }
+            node_map_[key] = new_node;
+            return new_node;
+        }
+
+        // allocate new node
+        node_type* new_node = alloc_node();
+        if (new_node == NULL) {
+            return NULL;
+        }
+        new_node->key = key;
+        new_node->value = value;
+        index_head->pre = new_node;
+        new_node->next = index_head;
+        new_node->pre = NULL;
+        index_buckets_[index_id] = reinterpret_cast<uint64_t>(new_node);
+        node_map_[key] = new_node;
+        return new_node;
     }
 
     std::vector<uint64_t> index_buckets_;
