@@ -77,7 +77,7 @@ public:
     }
 
     node_type* insert(const Key& index, const NKT& key, const NVT& value, bool replace_existed) {
-        node_type* node = exist(key);
+        node_type* node = exist(index, key);
         if (node == NULL) {
             return insert(index, key, value);
         }
@@ -106,12 +106,13 @@ public:
             return NULL;
         }
 
-        node_type* target_node = exist(key);
+        node_type* target_node = exist(index, key);
         if (!target_node) {
             return NULL;
         }
 
-        node_map_.erase(key);
+        std::string xkey = std::to_string(index) + "_" + std::to_string(key);
+        node_map_.erase(xkey);
         recycled_.push_back(target_node);
         if (target_node->pre == NULL && target_node->next == NULL) {
             index_buckets_[index_id] = 0;
@@ -187,8 +188,9 @@ private:
         return cur_node;
     }
 
-    node_type* exist(const NKT& key) const {
-        auto iter = node_map_.find(key);
+    node_type* exist(const Key& index, const NKT& key) const {
+        std::string xkey = std::to_string(index) + "_" + std::to_string(key);
+        auto iter = node_map_.find(xkey);
         if (iter == node_map_.end()) {
             return NULL;
         }
@@ -204,13 +206,14 @@ private:
         size_t index_id = 0;
         node_type* index_head = get_index(index, index_id);
         node_type* cur_node = index_head;
+        std::string xkey = std::to_string(index) + "_" + std::to_string(key);
         if (cur_node == NULL) {
             // alloc head node of new index
             node_type* new_node = new_index(index, key, value);
             if (new_node == NULL) {
                 return NULL;
             }
-            node_map_[key] = new_node;
+            node_map_[xkey] = new_node;
             return new_node;
         }
 
@@ -225,14 +228,14 @@ private:
         new_node->next = index_head;
         new_node->pre = NULL;
         index_buckets_[index_id] = reinterpret_cast<uint64_t>(new_node);
-        node_map_[key] = new_node;
+        node_map_[xkey] = new_node;
         return new_node;
     }
 
     std::deque<uint64_t> index_buckets_;
     size_t current_index_num_;
 
-    std::unordered_map<NKT, node_type*> node_map_;
+    std::unordered_map<std::string, node_type*> node_map_;
     google::sparse_hash_map<Key, size_t> header_;
     std::vector<node_type*> recycled_;
     RecycledMemoryPool<node_type> mempool_;
