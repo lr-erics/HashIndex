@@ -10,7 +10,7 @@
 面向每次都是Fixed-size的内存申请操作场景设计，可进行有效的内存回收，提高内存使用效率，避免产生内存碎片。
 **不是面向任意size的内存申请场景设计**
 
-##Hash_reverse_index.h
+##Hash_index.h
 正排索引结构。Not thread-safe。
 1. open-hash. 默认数据结点的Key为uint64。
 2. 使用内存池管理数据结点的删除和新增等操作，避免引入内存碎片。
