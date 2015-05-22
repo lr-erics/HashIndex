@@ -5,6 +5,7 @@
 #include <deque>
 #include <vector>
 #include <iostream>
+#include <sstream>
 
 #include <google/sparse_hash_map>
 #include <unordered_map>
@@ -111,8 +112,9 @@ public:
             return NULL;
         }
 
-        std::string xkey = std::to_string(index) + "_" + std::to_string(key);
-        node_map_.erase(xkey);
+        std::stringstream xkey;
+        xkey << index + "_" << key;
+        node_map_.erase(xkey.str());
         recycled_.push_back(target_node);
         if (target_node->pre == NULL && target_node->next == NULL) {
             index_buckets_[index_id] = 0;
@@ -189,8 +191,9 @@ private:
     }
 
     node_type* exist(const Key& index, const NKT& key) const {
-        std::string xkey = std::to_string(index) + "_" + std::to_string(key);
-        auto iter = node_map_.find(xkey);
+        std::stringstream xkey;
+        xkey << index + "_" << key;
+        auto iter = node_map_.find(xkey.str());
         if (iter == node_map_.end()) {
             return NULL;
         }
@@ -206,7 +209,9 @@ private:
         size_t index_id = 0;
         node_type* index_head = get_index(index, index_id);
         node_type* cur_node = index_head;
-        std::string xkey = std::to_string(index) + "_" + std::to_string(key);
+        std::stringstream ss;
+        ss << index + "_" << key;
+        std::string xkey = ss.str();
         if (cur_node == NULL) {
             // alloc head node of new index
             node_type* new_node = new_index(index, key, value);
